@@ -4,44 +4,48 @@
 
 Entity::Entity(int x, int y, char icon)
 {
-	this->x = x;
-	this->y = y;
+	this->pos = Vector2(x, y);
 	this->icon = icon;
 }
+Entity::Entity(Vector2 v, char icon) : pos(v), icon(icon)
+{}
 
-void Entity::set_x(int x) 
+Entity::Entity()
 {
-	this->x = x;
+	this->pos = Vector2(0, 0);
+	this->icon = 1;
+}
+char Entity::get_icon()
+{
+	return icon;
+}
+Vector2 Entity::get_pos()
+{
+	return this->pos;
 }
 
-void Entity::set_y(int y)
+void Entity::set_pos(int x, int y)
 {
-	this->y = y;
+	set_pos_x(x);
+	set_pos_y(y);
+}
+void Entity::set_pos(Vector2 v)
+{
+	this->pos = v;
 }
 
-void Entity::set_icon(char icon) 
+void Entity::set_pos_x(int x)
 {
-	this->icon = icon;
+	this->pos.x = x;
 }
-
-int Entity::get_x() const
+void Entity::set_pos_y(int y)
 {
-	return this->x;
-}
-
-int Entity::get_y() const
-{
-	return this->y;
-}
-
-char Entity::get_icon() const
-{
-	return this->icon;
+	this->pos.y = y;
 }
 
 void Entity::show() const
 {
-	std::cout << get_icon();
+	std::cout << this->icon;
 }
 
 void Entity::move_entity(char input)
@@ -49,38 +53,19 @@ void Entity::move_entity(char input)
 	//doesnt have bound checking
 	switch (input)
 	{
-		case 'w':
-			set_y(this->y - 1);
+		case UP:
+			this->pos.y -= 1;
 			break;
-		case 'd':
-			set_x(this->x + 1);
+		case RIGHT:
+			this->pos.x += 1;
 			break;
-		case 's':
-			set_y(this->y + 1);
+		case DOWN:
+			this->pos.y += 1;
 			break;
-		case 'a':
-			set_x(this->x - 1);
+		case LEFT:
+			this->pos.x -= 1;
 			break;
 		default:
 			break;
 	}
-}
-
-bool Entity::is_inbounds(int width, int height)
-{
-	return (is_x_inbounds(width) && is_y_inbounds(height));
-}
-
-bool Entity::is_x_inbounds(int width)
-{
-	return (this->x >= 0 && this->x < width);
-}
-bool Entity::is_y_inbounds(int height)
-{
-	return (this->y >= 0 && this->y < height);
-}
-
-bool Entity::is_at_win_position(int winX, int winY)
-{
-	return (this->x == winX && this->y == winY);
 }
